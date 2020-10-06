@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   PanResponderGestureState,
@@ -10,18 +10,21 @@ import {
 } from "react-native";
 import GestureRecognizer from "react-native-swipe-gestures";
 import { Cell } from "./Cell";
+import { createInitialGrid, getCellSize } from "./gameLib";
 
 const GRID_SIZE = 20;
-const windowWidth = Dimensions.get("window").width;
-const cellSize = windowWidth / GRID_SIZE;
-
-type Cell = "empty" | "snake" | "food";
-let grid: Cell[][] = Array(GRID_SIZE).fill(Array(GRID_SIZE).fill("empty"));
-// let grid: Cell[][] = [...Array(GRID_SIZE)].map(() =>
-//   [...Array(GRID_SIZE)].map(() => "empty")
-// );
+const cellSize = getCellSize(GRID_SIZE);
+let grid = createInitialGrid(GRID_SIZE);
 
 export const Game = () => {
+  const [gameSpeed, setGameSpeed] = useState(500);
+  const [snakePosition, setSnakePosition] = useState({
+    x: GRID_SIZE / 2,
+    y: GRID_SIZE / 2,
+  });
+
+  // useEffect(() => {}, []);
+
   const setSnakeDirection = (
     gestureName: string,
     gestureSate: PanResponderGestureState
@@ -33,9 +36,16 @@ export const Game = () => {
   return (
     <GestureRecognizer style={styles.container} onSwipe={setSnakeDirection}>
       {grid.map((row, rowIndex) => (
-        <View style={{ display: "flex", flexDirection: "row" }}>
+        <View key={rowIndex} style={{ display: "flex", flexDirection: "row" }}>
           {row.map((cell, columnIndex) => {
-            return <Cell key={columnIndex + rowIndex} size={cellSize} />;
+            console.log(cell);
+            return (
+              <Cell
+                key={`${columnIndex}${rowIndex}`}
+                size={cellSize}
+                type={cell}
+              />
+            );
           })}
         </View>
       ))}
