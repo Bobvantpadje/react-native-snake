@@ -11,7 +11,7 @@ export const Cell: React.FC<ICellProps> = ({ size, type }) => {
       style={{
         width: size,
         height: size,
-        margin: 1,
+        // margin: 1,
         backgroundColor: getColor(type),
       }}
     />

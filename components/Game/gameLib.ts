@@ -1,4 +1,5 @@
 import { Dimensions } from "react-native";
+import produce from "immer";
 
 export const getCellSize = (gridSize: number) => {
   const windowWidth = Dimensions.get("window").width;
@@ -13,5 +14,19 @@ export const createInitialGrid = (gridSize: number) => {
 };
 
 export const insertInitialSnakeInGrid = (grid: IGrid) => {
+  const middle = grid.length / 2;
+  return produce(grid, (draft) => {
+    draft[middle][middle] = "snake";
+    draft[middle][middle + 1] = "snake";
+    draft[middle][middle + 2] = "snake";
+  });
+};
 
+interface State {
+  readonly x: number;
 }
+
+// `x` cannot be modified here
+const state: State = {
+  x: 0,
+};
